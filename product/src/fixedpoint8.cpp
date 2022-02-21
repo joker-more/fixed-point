@@ -39,8 +39,28 @@ fixedpoints::fixedpoint8::~fixedpoint8(){
  * 
  * @return int64_t 
  */
-int64_t fixedpoints::fixedpoint8::getfixedpoint(){
+int64_t fixedpoints::fixedpoint8::getFixedpoint(){
     return _fixedpoint;
+}
+
+/**
+ * @brief Get floatingpoint(double).
+ * 
+ * @return double
+ */
+double fixedpoints::fixedpoint8::getFloatingpoint(){
+    double return_value = (double)((double)_fixedpoint / (double)(1 << fixedpoints::DecimalPointBit8));
+    return return_value;
+}
+
+/**
+ * @brief print floatingpoint(double).
+ * @details If you want to specify the number of floating-point digits, use std::setprecision.
+ * @return void
+ */
+void fixedpoints::fixedpoint8::printFloatingpoint(){
+    std::cout << this->getFloatingpoint() << std::endl;
+    return;
 }
 
 /**
@@ -51,8 +71,8 @@ int64_t fixedpoints::fixedpoint8::getfixedpoint(){
  */
 fixedpoints::fixedpoint8 fixedpoints::fixedpoint8::operator+ (fixedpoints::fixedpoint8& op){
     fixedpoints::fixedpoint8 return_class;
-    if(!overflow_addition(this->getfixedpoint(), op.getfixedpoint())){
-        return_class = fixedpoints::fixedpoint8((this->getfixedpoint() + op.getfixedpoint()));
+    if(!overflow_addition(this->getFixedpoint(), op.getFixedpoint())){
+        return_class = fixedpoints::fixedpoint8((this->getFixedpoint() + op.getFixedpoint()));
     }
     return return_class;
 }
@@ -65,8 +85,8 @@ fixedpoints::fixedpoint8 fixedpoints::fixedpoint8::operator+ (fixedpoints::fixed
  */
 fixedpoints::fixedpoint8 fixedpoints::fixedpoint8::operator- (fixedpoints::fixedpoint8& op){
     fixedpoints::fixedpoint8 return_class;
-    if(!overflow_subtraction(this->getfixedpoint(), op.getfixedpoint())){
-        return_class = fixedpoints::fixedpoint8((this->getfixedpoint() - op.getfixedpoint()));
+    if(!overflow_subtraction(this->getFixedpoint(), op.getFixedpoint())){
+        return_class = fixedpoints::fixedpoint8((this->getFixedpoint() - op.getFixedpoint()));
     }
     return return_class;
 }
@@ -79,8 +99,8 @@ fixedpoints::fixedpoint8 fixedpoints::fixedpoint8::operator- (fixedpoints::fixed
  */
 fixedpoints::fixedpoint8 fixedpoints::fixedpoint8::operator* (fixedpoints::fixedpoint8& op){
     fixedpoints::fixedpoint8 return_class;
-    if(!overflow_multiplication(this->getfixedpoint(), op.getfixedpoint())){
-        int64_t fixedpoint = (this->getfixedpoint() * op.getfixedpoint()) >> fixedpoints::DecimalPointBit8;
+    if(!overflow_multiplication(this->getFixedpoint(), op.getFixedpoint())){
+        int64_t fixedpoint = (this->getFixedpoint() * op.getFixedpoint()) >> fixedpoints::DecimalPointBit8;
         return_class = fixedpoints::fixedpoint8(fixedpoint);
     }
     return return_class;
@@ -94,8 +114,8 @@ fixedpoints::fixedpoint8 fixedpoints::fixedpoint8::operator* (fixedpoints::fixed
  */
 fixedpoints::fixedpoint8 fixedpoints::fixedpoint8::operator/ (fixedpoints::fixedpoint8& op){
     fixedpoints::fixedpoint8 return_class;
-    if(!overflow_division(this->getfixedpoint(), op.getfixedpoint())){
-        return_class = fixedpoints::fixedpoint8((this->getfixedpoint() << fixedpoints::DecimalPointBit8) / op.getfixedpoint());
+    if(!overflow_division(this->getFixedpoint(), op.getFixedpoint())){
+        return_class = fixedpoints::fixedpoint8((this->getFixedpoint() << fixedpoints::DecimalPointBit8) / op.getFixedpoint());
     }
     return return_class;
 }
@@ -109,7 +129,7 @@ fixedpoints::fixedpoint8 fixedpoints::fixedpoint8::operator/ (fixedpoints::fixed
  */
 bool fixedpoints::fixedpoint8::operator== (fixedpoints::fixedpoint8& op){
     bool return_value = false;
-    if(this->getfixedpoint() == op.getfixedpoint()){
+    if(this->getFixedpoint() == op.getFixedpoint()){
         return_value = true;
     }
     return return_value;
@@ -124,7 +144,7 @@ bool fixedpoints::fixedpoint8::operator== (fixedpoints::fixedpoint8& op){
  */
 bool fixedpoints::fixedpoint8::operator!= (fixedpoints::fixedpoint8& op){
     bool return_value = false;
-    if(this->getfixedpoint() != op.getfixedpoint()){
+    if(this->getFixedpoint() != op.getFixedpoint()){
         return_value = true;
     }
     return return_value;
