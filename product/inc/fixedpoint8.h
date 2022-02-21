@@ -19,7 +19,9 @@ namespace fixedpoints {
             fixedpoint8(int64_t fixedpoint);
             fixedpoint8(double floatingpoint);
             ~fixedpoint8();
-            int64_t getfixedpoint();
+            int64_t getFixedpoint();
+            double getFloatingpoint();
+            void printFloatingpoint();
             fixedpoint8 operator+ (fixedpoint8& op);
             fixedpoint8 operator- (fixedpoint8& op);
             fixedpoint8 operator* (fixedpoint8& op);

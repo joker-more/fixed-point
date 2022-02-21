@@ -36,10 +36,44 @@ TEST(FixedPoint8, constructor_withdouble_max){
     );
 }
 
-TEST(FixedPoint8, getfixedpoint){
+TEST(FixedPoint8, getFixedpoint){
     int64_t test_parameter = 1111111111;
     fixedpoints::fixedpoint8 test(test_parameter);
-    ASSERT_EQ(test.getfixedpoint(), test_parameter);
+    ASSERT_EQ(test.getFixedpoint(), test_parameter);
+}
+
+TEST(FixedPoint8, getFloatingpoint){
+    double constructor_parameter = 1.1;
+    fixedpoints::fixedpoint8 test(constructor_parameter);
+ 
+    int64_t pseudo_fixedpoint_parameter = (int64_t)(constructor_parameter * (1 << fixedpoints::DecimalPointBit8));
+ 
+    double test_parameter = (double)((double)pseudo_fixedpoint_parameter / (double)(1 << fixedpoints::DecimalPointBit8));
+ 
+    ASSERT_DOUBLE_EQ(test.getFloatingpoint(), test_parameter);
+}
+
+TEST(FixedPoint8, printFloatingpoint){
+    double constructor_parameter = 1.1;
+    fixedpoints::fixedpoint8 test(constructor_parameter);
+ 
+    int64_t pseudo_fixedpoint_parameter = (int64_t)(constructor_parameter * (1 << fixedpoints::DecimalPointBit8));
+ 
+    double test_parameter = (double)((double)pseudo_fixedpoint_parameter / (double)(1 << fixedpoints::DecimalPointBit8));
+
+    std::cout << std::fixed << std::setprecision(6);
+    std::ostringstream oss;
+    std::streambuf* p_cout_streambuf = std::cout.rdbuf();
+    std::cout.rdbuf(oss.rdbuf());
+
+    test.printFloatingpoint();
+
+    std::cout.rdbuf(p_cout_streambuf);
+
+    std::string print_double_value = oss.str();
+    print_double_value.erase(--print_double_value.end());
+
+    ASSERT_STREQ(print_double_value.c_str(), std::to_string(test_parameter).c_str());
 }
 
 TEST(FixedPoint8, operator_addition){
@@ -51,7 +85,7 @@ TEST(FixedPoint8, operator_addition){
 
     fixedpoints::fixedpoint8 test3 = test1 + test2;
 
-    ASSERT_EQ(test3.getfixedpoint(), (test_parameter1 + test_parameter2));
+    ASSERT_EQ(test3.getFixedpoint(), (test_parameter1 + test_parameter2));
 }
 
 TEST(FixedPoint8, operator_addition_overflow_left){
@@ -63,7 +97,7 @@ TEST(FixedPoint8, operator_addition_overflow_left){
 
     fixedpoints::fixedpoint8 test3 = test1 + test2;
 
-    ASSERT_EQ(test3.getfixedpoint(), 0);
+    ASSERT_EQ(test3.getFixedpoint(), 0);
 }
 
 TEST(FixedPoint8, operator_addition_overflow_right){
@@ -75,7 +109,7 @@ TEST(FixedPoint8, operator_addition_overflow_right){
 
     fixedpoints::fixedpoint8 test3 = test1 + test2;
 
-    ASSERT_EQ(test3.getfixedpoint(), 0);
+    ASSERT_EQ(test3.getFixedpoint(), 0);
 }
 
 TEST(FixedPoint8, operator_subtraction){
@@ -87,7 +121,7 @@ TEST(FixedPoint8, operator_subtraction){
 
     fixedpoints::fixedpoint8 test3 = test1 - test2;
 
-    ASSERT_EQ(test3.getfixedpoint(), (test_parameter1 - test_parameter2));
+    ASSERT_EQ(test3.getFixedpoint(), (test_parameter1 - test_parameter2));
 }
 
 TEST(FixedPoint8, operator_subtraction_overflow_left){
@@ -99,7 +133,7 @@ TEST(FixedPoint8, operator_subtraction_overflow_left){
 
     fixedpoints::fixedpoint8 test3 = test1 - test2;
 
-    ASSERT_EQ(test3.getfixedpoint(), 0);
+    ASSERT_EQ(test3.getFixedpoint(), 0);
 }
 
 TEST(FixedPoint8, operator_subtraction_overflow_right){
@@ -111,7 +145,7 @@ TEST(FixedPoint8, operator_subtraction_overflow_right){
 
     fixedpoints::fixedpoint8 test3 = test1 - test2;
 
-    ASSERT_EQ(test3.getfixedpoint(), 0);
+    ASSERT_EQ(test3.getFixedpoint(), 0);
 }
 
 TEST(FixedPoint8, operator_multiplication){
@@ -123,7 +157,7 @@ TEST(FixedPoint8, operator_multiplication){
 
     fixedpoints::fixedpoint8 test3 = test1 * test2;
 
-    ASSERT_EQ(test3.getfixedpoint(), ((test_parameter1 * test_parameter2) >> fixedpoints::DecimalPointBit8));
+    ASSERT_EQ(test3.getFixedpoint(), ((test_parameter1 * test_parameter2) >> fixedpoints::DecimalPointBit8));
 }
 
 TEST(FixedPoint8, operator_multiplication_overflow_first){
@@ -135,7 +169,7 @@ TEST(FixedPoint8, operator_multiplication_overflow_first){
 
     fixedpoints::fixedpoint8 test3 = test1 * test2;
 
-    ASSERT_EQ(test3.getfixedpoint(), 0);
+    ASSERT_EQ(test3.getFixedpoint(), 0);
 }
 
 TEST(FixedPoint8, operator_multiplication_overflow_second){
@@ -147,7 +181,7 @@ TEST(FixedPoint8, operator_multiplication_overflow_second){
 
     fixedpoints::fixedpoint8 test3 = test1 * test2;
 
-    ASSERT_EQ(test3.getfixedpoint(), 0);
+    ASSERT_EQ(test3.getFixedpoint(), 0);
 }
 
 TEST(FixedPoint8, operator_multiplication_overflow_third){
@@ -159,7 +193,7 @@ TEST(FixedPoint8, operator_multiplication_overflow_third){
 
     fixedpoints::fixedpoint8 test3 = test1 * test2;
 
-    ASSERT_EQ(test3.getfixedpoint(), 0);
+    ASSERT_EQ(test3.getFixedpoint(), 0);
 }
 
 TEST(FixedPoint8, operator_multiplication_overflow_fourth){
@@ -171,7 +205,7 @@ TEST(FixedPoint8, operator_multiplication_overflow_fourth){
 
     fixedpoints::fixedpoint8 test3 = test1 * test2;
 
-    ASSERT_EQ(test3.getfixedpoint(), 0);
+    ASSERT_EQ(test3.getFixedpoint(), 0);
 }
 
 TEST(FixedPoint8, operator_division){
@@ -183,7 +217,7 @@ TEST(FixedPoint8, operator_division){
 
     fixedpoints::fixedpoint8 test3 = test1 / test2;
 
-    ASSERT_EQ(test3.getfixedpoint(), ((test_parameter1 << fixedpoints::DecimalPointBit8) / test_parameter2));
+    ASSERT_EQ(test3.getFixedpoint(), ((test_parameter1 << fixedpoints::DecimalPointBit8) / test_parameter2));
 }
 
 TEST(FixedPoint8, operator_division_overflow_left){
@@ -195,7 +229,7 @@ TEST(FixedPoint8, operator_division_overflow_left){
 
     fixedpoints::fixedpoint8 test3 = test1 / test2;
 
-    ASSERT_EQ(test3.getfixedpoint(), 0);
+    ASSERT_EQ(test3.getFixedpoint(), 0);
 }
 
 TEST(FixedPoint8, operator_division_overflow_right){
@@ -207,7 +241,7 @@ TEST(FixedPoint8, operator_division_overflow_right){
 
     fixedpoints::fixedpoint8 test3 = test1 / test2;
 
-    ASSERT_EQ(test3.getfixedpoint(), 0);
+    ASSERT_EQ(test3.getFixedpoint(), 0);
 }
 
 TEST(FixedPoint8, operator_equation){
